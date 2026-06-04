@@ -1,0 +1,70 @@
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+}
+
+.navbar {
+    background-color: #6f8a67;
+}
+
+.navbar .navbar-brand {
+    color: #f0f0f0;
+}
+
+.navbar .nav-link {
+    color: #f0f0f0 !important;
+}
+
+.navbar-brand {
+  font-family: "Pinyon Script", cursive;
+  font-weight: 400;
+  font-style: normal;
+}
+
+main {
+    flex: 1;
+}
+
+.search-form {
+	max-width: 400px;
+}
+
+.card-img-top {
+    height: 400px; 
+    object-fit: cover;
+}
+
+footer {
+    margin-top: 50px;
+    padding: 20px;
+    background-color: #6f8a67;
+}
+
+.fa-instagram {
+    color: #f0f0f0;
+    font-size: 30px;
+    margin-right: 15px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.fa-instagram:hover {
+  color: #CCCCCC;
+  transform: scale(1.1);
+  cursor: pointer;
+}
+
+.fa-whatsapp {
+    color: #f0f0f0;
+    font-size: 30px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+    transition: transform 0.3s ease, color 0.3s ease;
+}
+
+.fa-whatsapp:hover {
+  color: #CCCCCC;
+  transform: scale(1.1);
+  cursor: pointer;
+}
