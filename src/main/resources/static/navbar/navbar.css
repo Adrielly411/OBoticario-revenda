@@ -1,0 +1,17 @@
+.navbar {
+    background-color: #6f8a67;
+}
+
+.navbar .navbar-brand {
+    color: #f0f0f0;
+}
+
+.navbar .nav-link {
+    color: #f0f0f0 !important;
+}
+
+.navbar-brand {
+  font-family: "Pinyon Script", cursive;
+  font-weight: 400;
+  font-style: normal;
+}

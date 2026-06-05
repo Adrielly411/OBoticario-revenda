@@ -10,12 +10,3 @@ body {
 main {
     flex: 1;
 }
-
-.search-form {
-	max-width: 400px;
-}
-
-.card-img-top {
-    height: 400px; 
-    object-fit: cover;
-}

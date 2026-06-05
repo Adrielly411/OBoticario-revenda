@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="pt">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Criar Produto</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/navbar/navbar.css}">
+    <link rel="stylesheet" th:href="@{/footer/footer.css}">
+    <link rel="stylesheet" href="/admin/create-product/create-product.css">
+    <script src="https://kit.fontawesome.com/821ff5176a.js" crossorigin="anonymous"></script>
+  </head>
+  <body>
+    <section th:insert="~{admin/navbar :: nav}"></section>
+
+    <main class="container d-flex justify-content-center">
+        <form>
+            <div class="mb-5">
+                <label for="productName" class="form-label">Nome</label>
+                <input type="text" class="form-control" id="productName">
+            </div>
+            <div class="mb-5">
+                <label for="productPrice" class="form-label">Preço original</label>
+                <input type="text" class="form-control" id="productPrice">
+            </div>
+            <div class="mb-5">
+                <label for="productDiscountedPrice" class="form-label">Preço com desconto</label>
+                <input type="text" class="form-control" id="productDiscountedPrice">
+            </div>
+            <div class="mb-5">
+                <label for="productImage" class="form-label">Foto do produto</label>
+                <input class="form-control" type="file" id="productImage">
+            </div>     
+            <button type="submit" class="btn btn-success">Criar</button>
+        </form>
+    </main>
+
+    <section th:insert="~{footer :: footer}"></section>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+  </body>
+</html>
