@@ -5,9 +5,9 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 
 @Controller
-public class IndexController {
-    @GetMapping("/")
-    public String getIndex() {
-        return "index";
+public class AuthController {
+    @GetMapping("/secret-login")
+    public String getSecretLoginPage() {
+        return "secret-login";
     }
 }
