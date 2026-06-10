@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt">
+<html xmlns="http://www.thymeleaf.org" lang="pt">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -82,7 +82,7 @@
                                     <div class="card-body">
                                         <div class="mb-2"><i class="fa-solid fa-tags fs-3"></i></div>
                                         <h6 class="card-subtitle mb-2 text-muted text-uppercase">Produtos Cadastrados</h6>
-                                        <h2 class="card-title fw-bold text-dark mt-3">84</h2>
+                                        <h2 class="card-title fw-bold text-dark mt-3" th:text="${numberProducts}">Número de produtos</h2>
                                     </div>
                                 </div>
                             </div>

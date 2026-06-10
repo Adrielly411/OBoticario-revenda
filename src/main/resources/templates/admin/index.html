@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt">
+<html xmlns="http://www.thymeleaf.org" lang="pt">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -22,128 +22,51 @@
             <input class="search-form form-control me-2" type="search" placeholder="Pesquisar produto" aria-label="Search"/>
             <button class="btn btn-outline-success" type="submit">Pesquisar</button>
         </form>
+        <form th:action="@{/admin}" method="get" class="d-flex gap-2">
+          <select class="form-select" name="gender" id="gender" aria-label="Default select example">
+              <option value="" th:selected="${selectedGender == null}">Todos os gêneros</option>
+              <option value="MALE" th:selected="${selectedGender == 'MALE'}">Masculino</option>
+              <option value="FEMALE" th:selected="${selectedGender == 'FEMALE'}">Feminino</option>
+          </select>
+          <button type="submit" class="btn btn-outline-success">Filtrar</button>
+        </form>
       </section>
 
       <section class="row row-cols-1 row-cols-md-3 g-4">
-        <div class="col">
+        <div class="col" th:each="product : ${products}">
           <div class="card h-100 shadow-sm border-0">
             <div class="position-relative">
-              <img src="/index/img/produto1.jpeg" class="card-img-top" alt="Nome do Produto">
-              <span class="badge bg-danger position-absolute top-0 start-0 m-2 fs-6">
-                -20%
+              <img th:src="${product.imageUrl}" class="card-img-top">
+              <span class="badge bg-danger position-absolute top-0 start-0 m-2 fs-6" th:text="|- ${product.discountPercentage}%|">
+                Porcentagem do desconto
               </span>
             </div>
 
             <div class="card-body d-flex flex-column justify-content-between">
               <div>
-                <h5 class="card-title text-dark fw-semibold mb-2">Nome do Produto</h5>
+                <h5 class="card-title text-dark fw-semibold mb-2" th:text="${product.name}">Nome do Produto</h5>
               </div>
 
               <div class="mt-3">
-                <small class="fs-4 text-muted text-decoration-line-through d-block mb-1">
-                  R$ 150,00
+                <small class="fs-4 text-muted text-decoration-line-through d-block mb-1" th:text="|R$ ${product.price}|">
+                  Preço do produto
                 </small>
                 
                 <div class="d-flex align-items-baseline gap-2 mb-3">
-                  <span class="fs-4 fw-bold text-success">R$ 120,00</span>
+                  <span class="fs-4 fw-bold text-success" th:text="|R$ ${product.discountedPrice}|">
+                    Preço com desconto
+                  </span>
                 </div>
-
-                <div class="d-grid gap-2 mx-auto">
-                    <a class="btn btn-success" href="admin/editar-produto" role="button">Editar</a>
-                    <a class="btn btn-danger" href="#" role="button">Excluir</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100 shadow-sm border-0">
-            <div class="position-relative">
-              <img src="/index/img/produto1.jpeg" class="card-img-top" alt="Nome do Produto">
-              <span class="badge bg-danger position-absolute top-0 start-0 m-2 fs-6">
-                -20%
-              </span>
-            </div>
-
-            <div class="card-body d-flex flex-column justify-content-between">
-              <div>
-                <h5 class="card-title text-dark fw-semibold mb-2">Nome do Produto</h5>
-              </div>
-
-              <div class="mt-3">
-                <small class="fs-4 text-muted text-decoration-line-through d-block mb-1">
-                  R$ 150,00
-                </small>
                 
-                <div class="d-flex align-items-baseline gap-2">
-                  <span class="fs-4 fw-bold text-success">R$ 120,00</span>
+                <div class="d-flex align-items-baseline gap-2 mb-3">
+                  <span class="fs-5 fw-bold" th:text="|Quantidade: ${product.quantity}|">
+                    Quantidade
+                  </span>
                 </div>
 
                 <div class="d-grid gap-2 mx-auto">
                     <a class="btn btn-success" href="admin/editar-produto" role="button">Editar</a>
-                    <a class="btn btn-danger" href="#" role="button">Excluir</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100 shadow-sm border-0">
-            <div class="position-relative">
-              <img src="/index/img/produto1.jpeg" class="card-img-top" alt="Nome do Produto">
-              <span class="badge bg-danger position-absolute top-0 start-0 m-2 fs-6">
-                -20%
-              </span>
-            </div>
-
-            <div class="card-body d-flex flex-column justify-content-between">
-              <div>
-                <h5 class="card-title text-dark fw-semibold mb-2">Nome do Produto</h5>
-              </div>
-
-              <div class="mt-3">
-                <small class="fs-4 text-muted text-decoration-line-through d-block mb-1">
-                  R$ 150,00
-                </small>
-                
-                <div class="d-flex align-items-baseline gap-2">
-                  <span class="fs-4 fw-bold text-success">R$ 120,00</span>
-                </div>
-
-                <div class="d-grid gap-2 mx-auto">
-                    <a class="btn btn-success" href="admin/editar-produto" role="button">Editar</a>
-                    <a class="btn btn-danger" href="#" role="button">Excluir</a>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col">
-          <div class="card h-100 shadow-sm border-0">
-            <div class="position-relative">
-              <img src="/index/img/produto1.jpeg" class="card-img-top" alt="Nome do Produto">
-              <span class="badge bg-danger position-absolute top-0 start-0 m-2 fs-6">
-                -20%
-              </span>
-            </div>
-
-            <div class="card-body d-flex flex-column justify-content-between">
-              <div>
-                <h5 class="card-title text-dark fw-semibold mb-2">Nome do Produto</h5>
-              </div>
-
-              <div class="mt-3">
-                <small class="fs-4 text-muted text-decoration-line-through d-block mb-1">
-                  R$ 150,00
-                </small>
-                
-                <div class="d-flex align-items-baseline gap-2">
-                  <span class="fs-4 fw-bold text-success">R$ 120,00</span>
-                </div>
-
-                <div class="d-grid gap-2 mx-auto">
-                    <a class="btn btn-success" href="admin/editar-produto" role="button">Editar</a>
-                    <a class="btn btn-danger" href="#" role="button">Excluir</a>
+                    <a class="btn btn-danger" th:href="@{/admin/deletar-produto(id=${product.id})}" role="button">Excluir</a>
                 </div>
               </div>
             </div>
