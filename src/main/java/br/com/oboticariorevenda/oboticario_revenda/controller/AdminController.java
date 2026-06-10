@@ -19,9 +19,6 @@ import br.com.oboticariorevenda.oboticario_revenda.model.Product;
 import br.com.oboticariorevenda.oboticario_revenda.service.ProductService;
 import jakarta.validation.Valid;
 
-
-
-
 @Controller
 public class AdminController {
     private ProductService productService;
@@ -31,20 +28,14 @@ public class AdminController {
     }
 
     @GetMapping("/admin")
-    public String getAdminIndex(@RequestParam(required = false) String gender, Model model) {
+    public String getAdminIndex(@RequestParam(required = false) String filter, Model model) {
         List<Product> products = new ArrayList<>();
 
-        if (gender == null || gender.equals("Todos os gêneros")) {
+        if (filter == null) {
             products = productService.getAllProducts();
-        } else {
-            List<Product> allProducts = productService.getAllProducts();
-            GenderEnum genderEnum = GenderEnum.valueOf(gender);
-
-            for (Product product : allProducts) {
-                if (product.getGender() == genderEnum) {
-                    products.add(product);
-                }
-            }
+        } else if (filter.equals("MALE") || filter.equals("FEMALE")) {
+            GenderEnum genderEnum = GenderEnum.valueOf(filter);
+            products = productService.getProductsByGender(genderEnum);
         }
 
         model.addAttribute("products", products);

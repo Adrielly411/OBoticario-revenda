@@ -18,18 +18,26 @@
 
     <main class="container">
       <section class="mb-3">
-        <form class="d-flex" role="search">
-            <input class="search-form form-control me-2" type="search" placeholder="Pesquisar produto" aria-label="Search"/>
-            <button class="btn btn-outline-success" type="submit">Pesquisar</button>
-        </form>
-        <form th:action="@{/admin}" method="get" class="d-flex gap-2">
-          <select class="form-select" name="gender" id="gender" aria-label="Default select example">
-              <option value="" th:selected="${selectedGender == null}">Todos os gêneros</option>
-              <option value="MALE" th:selected="${selectedGender == 'MALE'}">Masculino</option>
-              <option value="FEMALE" th:selected="${selectedGender == 'FEMALE'}">Feminino</option>
-          </select>
-          <button type="submit" class="btn btn-outline-success">Filtrar</button>
-        </form>
+        <div>
+          <form th:action="@{/admin}" method="get" class="d-flex gap-2">
+            <div class="me-auto d-flex">
+              <input class="search-form form-control me-2" type="search" placeholder="Pesquisar produto" aria-label="Search"/>
+              <button class="btn btn-outline-success" type="submit">Pesquisar</button>
+            </div>
+
+            <div class="btn-group" role="group">
+              <button type="button" class="btn btn-success rounded-3" data-bs-toggle="dropdown">
+                <i class="fa-solid fa-sliders"></i>
+              </button>
+              <ul class="dropdown-menu">
+                <li><button class="dropdown-item" type="submit" name="filter" value="MALE">Masculino</button></li>
+                <li><button class="dropdown-item" type="submit" name="filter" value="FEMALE">Feminino</button></li>
+                <li><a class="dropdown-item" type="submit" th:href="@{/admin}">Resetar filtro</a></li>
+              </ul>
+            </div>
+            <!-- <a type="submit" th:href="@{/admin}" class="btn btn-outline-success">Resetar filtro</a> -->
+          </form>
+        </div>
       </section>
 
       <section class="row row-cols-1 row-cols-md-3 g-4">
@@ -66,7 +74,7 @@
 
                 <div class="d-grid gap-2 mx-auto">
                     <a class="btn btn-success" href="admin/editar-produto" role="button">Editar</a>
-                    <a class="btn btn-danger" th:href="@{/admin/deletar-produto(id=${product.id})}" role="button">Excluir</a>
+                    <button class="delete-button btn btn-danger" th:data-url="@{/admin/deletar-produto(id=${product.id})}">Excluir</button>
                 </div>
               </div>
             </div>
@@ -78,5 +86,7 @@
     <section th:insert="~{footer :: footer}"></section>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
+    <script src="/admin/index/index.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </body>
 </html>

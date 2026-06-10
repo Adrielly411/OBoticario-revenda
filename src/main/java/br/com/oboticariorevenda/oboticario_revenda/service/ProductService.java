@@ -20,16 +20,19 @@ import io.imagekit.models.files.FileUploadResponse;
 @Service
 public class ProductService {
     private ProductRepository productRepository;
-    
-    @Value("${imagekit.private}")
     private String imagekit_private;
 
-    public ProductService(ProductRepository productRepository) {
+    public ProductService(ProductRepository productRepository, @Value("${imagekit.private}") String imagekit_private) {
         this.productRepository = productRepository;
+        this.imagekit_private = imagekit_private;
     }
 
     public List<Product> getAllProducts() {
         return productRepository.findAll();
+    }
+
+    public List<Product> getProductsByGender(GenderEnum genderEnum) {
+        return productRepository.findByGender(genderEnum);
     }
 
     public long getNumberOfProducts() {

@@ -16,13 +16,16 @@ public class ProductServiceTest {
     @Mock
     ProductRepository productRepository;
 
+    @Mock
+    String imagekit_private;
+
     ProductService productService;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
 
-        productService = new ProductService(productRepository);
+        productService = new ProductService(productRepository, imagekit_private);
     }
 
     @Test

@@ -2,8 +2,6 @@ package br.com.oboticariorevenda.oboticario_revenda.model;
 
 import java.util.UUID;
 
-import org.bson.types.Binary;
-
 import br.com.oboticariorevenda.oboticario_revenda.enums.GenderEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
