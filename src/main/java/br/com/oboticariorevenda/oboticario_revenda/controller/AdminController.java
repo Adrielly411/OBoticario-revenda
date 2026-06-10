@@ -2,6 +2,7 @@ package br.com.oboticariorevenda.oboticario_revenda.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -28,14 +29,22 @@ public class AdminController {
     }
 
     @GetMapping("/admin")
-    public String getAdminIndex(@RequestParam(required = false) String filter, Model model) {
+    public String getAdminIndex(@RequestParam(required = false, defaultValue = "all") String filter, Model model) {
         List<Product> products = new ArrayList<>();
 
-        if (filter == null) {
-            products = productService.getAllProducts();
-        } else if (filter.equals("MALE") || filter.equals("FEMALE")) {
-            GenderEnum genderEnum = GenderEnum.valueOf(filter);
-            products = productService.getProductsByGender(genderEnum);
+        switch (filter) {
+            case "MALE", "FEMALE" -> {
+                GenderEnum genderEnum = GenderEnum.valueOf(filter);
+                products = productService.getProductsByGender(genderEnum);
+            } 
+        
+            case "higherDiscount" -> products = productService.getProductsWithHigherDiscount();
+
+            case "higherQuantity" -> products = productService.getProductsWithHigherQuantity();
+
+            case "lowerQuantity" -> products = productService.getProductsWithLowerQuantity();
+
+            default -> products = productService.getAllProducts();
         }
 
         model.addAttribute("products", products);
@@ -60,10 +69,6 @@ public class AdminController {
         if (bindingResult.hasErrors()) {
 			return "/admin/create-product";
 		}
-
-        if (productDto.getGender().equals("Selecione o gênero")) {
-            bindingResult.addError(null);
-        }
 
         productService.saveProduct(productDto);
 

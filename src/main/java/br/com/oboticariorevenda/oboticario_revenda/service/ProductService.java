@@ -1,6 +1,7 @@
 package br.com.oboticariorevenda.oboticario_revenda.service;
 
 import java.io.IOException;
+import java.util.Comparator;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,18 +36,30 @@ public class ProductService {
         return productRepository.findByGender(genderEnum);
     }
 
+    public List<Product> getProductsWithHigherDiscount() {
+        List<Product> products = productRepository.findAll();
+        products.sort(Comparator.comparing(Product::getDiscountPercentage).reversed());
+        return products;
+    }
+
+    public List<Product> getProductsWithHigherQuantity() {
+        List<Product> products = productRepository.findAll();
+        products.sort(Comparator.comparing(Product::getQuantity).reversed());
+        return products;
+    }
+
+    public List<Product> getProductsWithLowerQuantity() {
+        List<Product> products = productRepository.findAll();
+        products.sort(Comparator.comparing(Product::getQuantity));
+        return products;
+    }
+
     public long getNumberOfProducts() {
         return productRepository.count();
     }
 
     public void saveProduct(ProductRequestDto productDto) throws IOException {
-        GenderEnum gender;
-
-        if (productDto.getGender().equals("Masculino")) {
-            gender = GenderEnum.MALE;
-        } else {
-            gender = GenderEnum.FEMALE;
-        }
+        GenderEnum gender = GenderEnum.valueOf(productDto.getGender());
 
         Product product = Product.builder()
             .name(productDto.getName())
