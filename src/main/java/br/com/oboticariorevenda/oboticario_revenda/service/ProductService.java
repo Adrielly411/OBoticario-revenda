@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.oboticariorevenda.oboticario_revenda.dto.ProductEditRequestDto;
 import br.com.oboticariorevenda.oboticario_revenda.dto.ProductRequestDto;
 import br.com.oboticariorevenda.oboticario_revenda.enums.GenderEnum;
 import br.com.oboticariorevenda.oboticario_revenda.model.Product;
@@ -32,8 +33,24 @@ public class ProductService {
         return productRepository.findAll();
     }
 
+    public Product getProductById(String id) {
+        return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Houve um erro ao buscar o produto"));
+    }
+
     public List<Product> getProductsByGender(GenderEnum genderEnum) {
         return productRepository.findByGender(genderEnum);
+    }
+
+    public List<Product> getProductsWithHigherPrice() {
+        List<Product> products = productRepository.findAll();
+        products.sort(Comparator.comparing(Product::getPrice).reversed());
+        return products;
+    }
+
+    public List<Product> getProductsWithLowerPrice() {
+        List<Product> products = productRepository.findAll();
+        products.sort(Comparator.comparing(Product::getPrice));
+        return products;
     }
 
     public List<Product> getProductsWithHigherDiscount() {
@@ -68,13 +85,26 @@ public class ProductService {
             .discountPercentage(calculateDiscount(productDto.getPrice(), productDto.getDiscountedPrice()))
             .quantity(productDto.getQuantity())
             .gender(gender)
-            .imageUrl(createImageUrl(productDto.getImageFile()))
+            .imageUrl(createImageUrlAndStoreOnImagekit(productDto.getImageFile()))
             .build();
 
         productRepository.save(product);
     }
 
-    public void editProduct(String id) {
+    public void editProduct(String id, ProductEditRequestDto productEditRequestDto) throws IOException {
+        Product product = this.getProductById(id);
+        product.setName(productEditRequestDto.getName());
+        product.setPrice(productEditRequestDto.getPrice());
+        product.setDiscountedPrice(productEditRequestDto.getDiscountedPrice());
+        product.setDiscountPercentage(this.calculateDiscount(productEditRequestDto.getPrice(), productEditRequestDto.getDiscountedPrice()));
+        product.setGender(GenderEnum.valueOf(productEditRequestDto.getGender()));
+        product.setQuantity(productEditRequestDto.getQuantity());
+        
+        if (!productEditRequestDto.getImageFile().isEmpty()) {
+            product.setImageUrl(createImageUrlAndStoreOnImagekit(productEditRequestDto.getImageFile()));
+        }
+
+        productRepository.save(product);
     }
 
     public void deleteProduct(String id) {
@@ -89,7 +119,7 @@ public class ProductService {
         return discountPercentage;
     }
 
-    private String createImageUrl(MultipartFile imageFile) throws IOException {
+    private String createImageUrlAndStoreOnImagekit(MultipartFile imageFile) throws IOException {
         String fileName = UUID.randomUUID().toString();
 
         ImageKitClient client = ImageKitOkHttpClient.builder()

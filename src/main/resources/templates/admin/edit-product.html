@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="pt">
+<html xmlns="http://www.thymeleaf.org" lang="pt">
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -10,30 +10,49 @@
     <link href="https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/navbar/navbar.css}">
     <link rel="stylesheet" th:href="@{/footer/footer.css}">
-    <link rel="stylesheet" href="/admin/edit-product/edit-product.css">
+    <link rel="stylesheet" href="/admin/create-product/create-product.css">
     <script src="https://kit.fontawesome.com/821ff5176a.js" crossorigin="anonymous"></script>
   </head>
   <body>
     <section th:insert="~{admin/navbar :: nav}"></section>
 
     <main class="container d-flex justify-content-center">
-        <form>
+        <form th:action="@{/admin/editar-produto(id=${productEditRequestDto.id})}" th:object="${productEditRequestDto}" method="post" enctype="multipart/form-data">
             <div class="mb-5">
-                <label for="productName" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="productName">
+                <label for="name" class="form-label">Nome</label>
+                <input th:value="${productEditRequestDto.name}" name="name" type="text" class="form-control" id="name">
+                <div th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-danger"></div>
             </div>
             <div class="mb-5">
-                <label for="productPrice" class="form-label">Preço original</label>
-                <input type="text" class="form-control" id="productPrice">
+                <label for="price" class="form-label">Preço original</label>
+                <input th:value="${productEditRequestDto.price}" name="price" type="number" step="any" class="form-control" id="price">
+                <div th:if="${#fields.hasErrors('price')}" th:errors="*{price}" class="text-danger"></div>
             </div>
             <div class="mb-5">
-                <label for="productDiscountedPrice" class="form-label">Preço com desconto</label>
-                <input type="text" class="form-control" id="productDiscountedPrice">
+                <label for="discountedPrice" class="form-label">Preço com desconto</label>
+                <input th:value="${productEditRequestDto.discountedPrice}" name="discountedPrice" type="number" step="any" class="form-control" id="discountedPrice">
+                <div th:if="${#fields.hasErrors('discountedPrice')}" th:errors="*{discountedPrice}" class="text-danger"></div>
             </div>
             <div class="mb-5">
-                <label for="productImage" class="form-label">Foto do produto</label>
-                <input class="form-control" type="file" id="productImage">
+                <label for="quantity" class="form-label">Quantidade</label>
+                <input th:value="${productEditRequestDto.quantity}" name="quantity" type="number" class="form-control" id="quantity">
+                <div th:if="${#fields.hasErrors('quantity')}" th:errors="*{quantity}" class="text-danger"></div>
+            </div>
+            <div class="mb-5">
+                <label for="gender" class="form-label">Gênero</label>
+                <select class="form-select" th:field="*{gender}" name="gender" id="gender" aria-label="Default select example">
+                    <option value="">Selecione o gênero</option>
+                    <option value="MALE">Masculino</option>
+                    <option value="FEMALE">Feminino</option>
+                </select>
+                <div th:if="${#fields.hasErrors('gender')}" th:errors="*{gender}" class="text-danger"></div>
+            </div>
+            <div class="mb-5">
+                <label for="imageFile" class="form-label">Foto do produto</label>
+                <input name="imageFile" class="form-control" type="file" id="imageFile">
+                <div th:if="${#fields.hasErrors('imageFile')}" th:errors="*{imageFile}" class="text-danger"></div>
             </div>     
+            <input type="hidden" th:field="*{imageUrl}">
             <button type="submit" class="btn btn-success">Editar</button>
         </form>
     </main>

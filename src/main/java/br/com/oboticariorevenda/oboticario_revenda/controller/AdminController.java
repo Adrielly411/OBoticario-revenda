@@ -2,7 +2,6 @@ package br.com.oboticariorevenda.oboticario_revenda.controller;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import br.com.oboticariorevenda.oboticario_revenda.dto.ProductEditRequestDto;
 import br.com.oboticariorevenda.oboticario_revenda.dto.ProductRequestDto;
 import br.com.oboticariorevenda.oboticario_revenda.enums.GenderEnum;
 import br.com.oboticariorevenda.oboticario_revenda.model.Product;
@@ -38,6 +38,10 @@ public class AdminController {
                 products = productService.getProductsByGender(genderEnum);
             } 
         
+            case "higherPrice" -> products = productService.getProductsWithHigherPrice();
+
+            case "lowerPrice" -> products = productService.getProductsWithLowerPrice();
+
             case "higherDiscount" -> products = productService.getProductsWithHigherDiscount();
 
             case "higherQuantity" -> products = productService.getProductsWithHigherQuantity();
@@ -76,8 +80,35 @@ public class AdminController {
     }
 
     @GetMapping("/admin/editar-produto")
-    public String getAdminEditProduct() {
+    public String getAdminEditProduct(@RequestParam String id, Model model) {
+        Product product = productService.getProductById(id);
+
+        ProductEditRequestDto productDto = new ProductEditRequestDto();
+        productDto.setId(product.getId());
+        productDto.setName(product.getName());
+        productDto.setPrice(product.getPrice());
+        productDto.setDiscountedPrice(product.getDiscountedPrice());
+        productDto.setQuantity(product.getQuantity());
+        productDto.setGender(product.getGender().toString());
+        productDto.setImageUrl(product.getImageUrl());
+
+        model.addAttribute("productEditRequestDto", productDto);
         return "/admin/edit-product";
+    }
+
+    @PostMapping("/admin/editar-produto")
+    public String editProduct(@RequestParam String id, @Valid @ModelAttribute ProductEditRequestDto productEditRequestDto, BindingResult bindingResult) {
+        if (bindingResult.hasErrors()) {
+            return "/admin/edit-product";
+        }
+
+        try {
+            productService.editProduct(id, productEditRequestDto);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return "redirect:/admin";
     }
 
     @GetMapping("/admin/deletar-produto")
