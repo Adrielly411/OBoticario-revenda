@@ -43,13 +43,13 @@ public class ProductService {
 
     public List<Product> getProductsWithHigherPrice() {
         List<Product> products = productRepository.findAll();
-        products.sort(Comparator.comparing(Product::getPrice).reversed());
+        products.sort(Comparator.comparing(Product::getDiscountedPrice).reversed());
         return products;
     }
 
     public List<Product> getProductsWithLowerPrice() {
         List<Product> products = productRepository.findAll();
-        products.sort(Comparator.comparing(Product::getPrice));
+        products.sort(Comparator.comparing(Product::getDiscountedPrice));
         return products;
     }
 
