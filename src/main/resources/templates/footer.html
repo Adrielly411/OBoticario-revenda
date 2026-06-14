@@ -9,8 +9,8 @@
 <body>
     <footer th:fragment="footer" class="d-flex align-items-center">
       <div class="social me-auto">
-        <a href="https://www.instagram.com/adryecleide_revendedoras/" target="_blank" rel="noopener noreferrer"><i class="insta fa-brands fa-instagram"></i></a>
-        <a href="https://chat.whatsapp.com/J9nuRdoXIxI29xhki5it6m?s=cl&p=a&ilr=1&amv=1" target="_blank" rel="noopener noreferrer"><i class="whats fa-brands fa-whatsapp"></i></a>
+        <a href="https://www.instagram.com/adryecleide_revendedoras/" th:onclick="fetch([[ @{/api/analytics/instagram} ]], {method: 'POST'})" target="_blank" rel="noopener noreferrer"><i class="insta fa-brands fa-instagram"></i></a>
+        <a href="https://chat.whatsapp.com/J9nuRdoXIxI29xhki5it6m?s=cl&p=a&ilr=1&amv=1" th:onclick="fetch([[ @{/api/analytics/whatsapp} ]], {method: 'POST'})" target="_blank" rel="noopener noreferrer"><i class="whats fa-brands fa-whatsapp"></i></a>
       </div>
       <div>
         <img src="/footer/img/logo.svg" alt="">

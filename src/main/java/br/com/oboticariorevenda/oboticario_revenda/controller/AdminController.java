@@ -17,15 +17,18 @@ import br.com.oboticariorevenda.oboticario_revenda.dto.ProductEditRequestDto;
 import br.com.oboticariorevenda.oboticario_revenda.dto.ProductRequestDto;
 import br.com.oboticariorevenda.oboticario_revenda.enums.GenderEnum;
 import br.com.oboticariorevenda.oboticario_revenda.model.Product;
+import br.com.oboticariorevenda.oboticario_revenda.model.SocialAnalytics;
 import br.com.oboticariorevenda.oboticario_revenda.service.ProductService;
 import jakarta.validation.Valid;
 
 @Controller
 public class AdminController {
     private ProductService productService;
+    private SocialAnalytics socialAnalytics;
 
-    public AdminController(ProductService productService) {
+    public AdminController(ProductService productService, SocialAnalytics socialAnalytics) {
         this.productService = productService;
+        this.socialAnalytics = socialAnalytics;
     }
 
     @GetMapping("/admin")
@@ -59,6 +62,8 @@ public class AdminController {
     public String getAdminReport(Model model) {
         HashMap<String, Object> attributes = new HashMap<>();
         attributes.put("numberProducts", productService.getNumberOfProducts());
+        attributes.put("instagramClicks", socialAnalytics.getInstagram_clicks());
+        attributes.put("whatsappClicks", socialAnalytics.getWhatsapp_clicks());
         model.addAllAttributes(attributes);
         return "/admin/report";
     }
