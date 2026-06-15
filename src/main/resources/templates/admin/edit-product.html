@@ -16,7 +16,7 @@
   <body>
     <section th:insert="~{admin/navbar :: nav}"></section>
 
-    <main class="container d-flex justify-content-center">
+    <main class="container d-flex flex-column justify-content-center">
         <form th:action="@{/admin/editar-produto(id=${productEditRequestDto.id})}" th:object="${productEditRequestDto}" method="post" enctype="multipart/form-data">
             <div class="mb-5">
                 <label for="name" class="form-label">Nome</label>
@@ -32,6 +32,7 @@
                 <label for="discountedPrice" class="form-label">Preço com desconto</label>
                 <input th:value="${productEditRequestDto.discountedPrice}" name="discountedPrice" type="number" step="any" class="form-control" id="discountedPrice">
                 <div th:if="${#fields.hasErrors('discountedPrice')}" th:errors="*{discountedPrice}" class="text-danger"></div>
+                <div th:if="${#fields.hasErrors('discountedPriceHigherThanPrice')}" th:errors="*{discountedPriceHigherThanPrice}" class="text-danger"></div>
             </div>
             <div class="mb-5">
                 <label for="quantity" class="form-label">Quantidade</label>

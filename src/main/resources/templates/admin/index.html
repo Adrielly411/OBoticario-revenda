@@ -20,14 +20,16 @@
       <section class="mb-3">
         <div>
           <form th:action="@{/admin}" method="get" class="d-flex gap-2">
-            <div class="me-auto d-flex">
-              <input class="search-form form-control me-2" type="search" placeholder="Pesquisar produto" aria-label="Search"/>
-              <button class="btn btn-outline-success" type="submit">Pesquisar</button>
+            <div class="me-auto d-flex col-8">
+              <input class="search-form form-control me-2" name="nameFilter" type="search" th:if="${nameFilter} == null" placeholder="Pesquisar produto" aria-label="Search"/>
+              <input class="search-form form-control me-2" name="nameFilter" type="search" th:if="${nameFilter} != null" th:placeholder="${nameFilter}" placeholder="Pesquisar produto" aria-label="Search"/>
+              <button class="btn btn-outline-success me-2" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+              <a class="btn btn-outline-danger" type="submit" th:href="@{/admin}"><i class="fa-solid fa-trash"></i></a>
             </div>
 
-            <div class="btn-group" role="group">
+            <div class="btn-group col-4" role="group">
               <button type="button" class="btn btn-success rounded-3" data-bs-toggle="dropdown">
-                <i class="fa-solid fa-sliders"></i>
+                <i class="fa-solid fa-sliders"></i> Filtros
               </button>
               <ul class="dropdown-menu">
                 <li><button class="dropdown-item" type="submit" name="filter" value="MALE">Masculino</button></li>
@@ -40,13 +42,16 @@
                 <li><a class="dropdown-item" type="submit" th:href="@{/admin}">Resetar filtro</a></li>
               </ul>
             </div>
-            <!-- <a type="submit" th:href="@{/admin}" class="btn btn-outline-success">Resetar filtro</a> -->
           </form>
         </div>
       </section>
 
       <section class="row row-cols-1 row-cols-lg-3 g-4">
-        <div class="col" th:each="product : ${products}">
+        <div class="col without-products mx-auto text-center" th:if="${#lists.isEmpty(products)}">
+          <h5 class="text-dark">Nenhum produto encontrado</h5>
+        </div>
+
+        <div class="col" th:if="${!#lists.isEmpty(products)}" th:each="product : ${products}">
           <div th:if="${product.quantity} > 0" class="card h-100 shadow-lg border-0">
             <div class="position-relative">
               <img th:src="${product.imageUrl}" class="card-img-top">

@@ -1,6 +1,7 @@
 package br.com.oboticariorevenda.oboticario_revenda.model;
 
 import java.util.UUID;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import br.com.oboticariorevenda.oboticario_revenda.enums.GenderEnum;
 import lombok.AllArgsConstructor;
@@ -9,6 +10,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Document(collection = "product")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

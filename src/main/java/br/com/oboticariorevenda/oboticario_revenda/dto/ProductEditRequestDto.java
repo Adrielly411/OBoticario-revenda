@@ -36,7 +36,12 @@ public class ProductEditRequestDto {
     private MultipartFile imageFile;
     private String imageUrl;
 
-    @AssertTrue(message = "A imagem do produto é obrigatória")
+    @AssertTrue(message = "O preço com desconto não pode ser maior que o preço original")
+    public boolean isDiscountedPriceHigherThanPrice() {
+        return (price >= discountedPrice);
+    }   
+
+    @AssertTrue()
     public boolean isImageUrlOrFileProvided() {
         return (imageFile != null && !imageFile.isEmpty()) || (imageUrl != null && !imageUrl.isBlank());
     }   

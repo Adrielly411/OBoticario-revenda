@@ -32,8 +32,15 @@ public class AdminController {
     }
 
     @GetMapping("/admin")
-    public String getAdminIndex(@RequestParam(required = false, defaultValue = "all") String filter, Model model) {
+    public String getAdminIndex(@RequestParam(required = false, defaultValue = "all") String filter, @RequestParam(required = false, defaultValue = "") String nameFilter, Model model) {
         List<Product> products = new ArrayList<>();
+
+        if (!nameFilter.isBlank()) {
+            products = productService.getProductsByCriteria(nameFilter);
+            model.addAttribute("nameFilter", nameFilter);
+            model.addAttribute("products", products);
+            return "/admin/index";
+        }
 
         switch (filter) {
             case "MALE", "FEMALE" -> {

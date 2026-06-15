@@ -37,6 +37,11 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Houve um erro ao buscar o produto"));
     }
 
+    public List<Product> getProductsByCriteria(String name) {
+        List<Product> products = productRepository.findAllBy(name);
+        return products;
+    }
+
     public List<Product> getProductsByGender(GenderEnum genderEnum) {
         return productRepository.findByGender(genderEnum);
     }

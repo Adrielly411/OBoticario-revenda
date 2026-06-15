@@ -2,6 +2,7 @@ package br.com.oboticariorevenda.oboticario_revenda.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -30,8 +31,21 @@ public class ProductRequestDto {
     private Integer quantity;
 
     @NotNull(message = "O gênero do produto é obrigatório")
+    @NotBlank(message = "O gênero do produto é obrigatório")
     private String gender;
 
-    @NotNull(message = "A imagem do produto é obrigatória")
     private MultipartFile imageFile;
+
+    @AssertTrue(message = "A imagem do produto é obrigatória")
+    public boolean isImageNull() {
+        return (imageFile != null && !imageFile.isEmpty());
+    }   
+
+    @AssertTrue(message = "O preço com desconto não pode ser maior que o preço original")
+    public boolean isDiscountedPriceHigherThanPrice() {
+        if (price == null || discountedPrice == null) {
+            return true; 
+        }
+        return (price >= discountedPrice);
+    }   
 }

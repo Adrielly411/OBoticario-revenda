@@ -15,7 +15,19 @@ main {
 	max-width: 400px;
 }
 
+.without-products {
+    padding-top: 30vh;
+}
+
 .card-img-top {
     height: 400px; 
     object-fit: cover;
+}
+
+.card-sold-out {
+    background-color: #CCCCCC;
+}
+
+.img-greyed {
+  filter: grayscale(90%);
 }
