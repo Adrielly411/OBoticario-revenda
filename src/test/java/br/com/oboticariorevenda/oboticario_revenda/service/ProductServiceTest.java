@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import br.com.oboticariorevenda.oboticario_revenda.dto.ProductRequestDto;
+import br.com.oboticariorevenda.oboticario_revenda.dto.ProductCreateRequestDto;
 import br.com.oboticariorevenda.oboticario_revenda.repository.ProductRepository;
 
 public class ProductServiceTest {
@@ -30,7 +30,7 @@ public class ProductServiceTest {
 
     @Test
     void shouldSaveProductSuccessfully() {
-        ProductRequestDto product = ProductRequestDto.builder()
+        ProductCreateRequestDto product = ProductCreateRequestDto.builder()
             .name("Product")
             .price(20.50)
             .discountedPrice(10.50)

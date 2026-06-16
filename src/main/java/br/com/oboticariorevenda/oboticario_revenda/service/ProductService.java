@@ -10,8 +10,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import br.com.oboticariorevenda.oboticario_revenda.dto.ProductEditRequestDto;
-import br.com.oboticariorevenda.oboticario_revenda.dto.ProductRequestDto;
+import br.com.oboticariorevenda.oboticario_revenda.dto.ProductCreateRequestDto;
 import br.com.oboticariorevenda.oboticario_revenda.enums.GenderEnum;
+import br.com.oboticariorevenda.oboticario_revenda.exception.ImageKitUploadException;
+import br.com.oboticariorevenda.oboticario_revenda.exception.ProductNotFoundException;
 import br.com.oboticariorevenda.oboticario_revenda.model.Product;
 import br.com.oboticariorevenda.oboticario_revenda.repository.ProductRepository;
 import io.imagekit.client.ImageKitClient;
@@ -34,7 +36,7 @@ public class ProductService {
     }
 
     public Product getProductById(String id) {
-        return productRepository.findById(id).orElseThrow(() -> new RuntimeException("Houve um erro ao buscar o produto"));
+        return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Não foi possível encontrar o produto"));
     }
 
     public List<Product> getProductsByCriteria(String name) {
@@ -80,7 +82,7 @@ public class ProductService {
         return productRepository.count();
     }
 
-    public void saveProduct(ProductRequestDto productDto) throws IOException {
+    public void saveProduct(ProductCreateRequestDto productDto) throws IOException {
         GenderEnum gender = GenderEnum.valueOf(productDto.getGender());
 
         Product product = Product.builder()
@@ -138,6 +140,6 @@ public class ProductService {
 
         FileUploadResponse response = client.files().upload(params);
 
-        return response.url().orElseThrow(() -> new IOException("O ImageKit concluiu o upload, mas não retornou a URL da imagem."));
+        return response.url().orElseThrow(() -> new ImageKitUploadException("O ImageKit concluiu o upload, mas não retornou a URL da imagem."));
     }
 }

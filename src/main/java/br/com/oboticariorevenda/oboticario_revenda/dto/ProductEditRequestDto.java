@@ -2,6 +2,7 @@ package br.com.oboticariorevenda.oboticario_revenda.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.oboticariorevenda.oboticario_revenda.validator.FileIsImage;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -33,6 +34,7 @@ public class ProductEditRequestDto {
     @NotNull(message = "O gênero do produto é obrigatório")
     private String gender;
 
+    @FileIsImage
     private MultipartFile imageFile;
     private String imageUrl;
 

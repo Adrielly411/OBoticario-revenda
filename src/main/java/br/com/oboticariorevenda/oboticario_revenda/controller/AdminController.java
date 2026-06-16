@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import br.com.oboticariorevenda.oboticario_revenda.dto.ProductEditRequestDto;
-import br.com.oboticariorevenda.oboticario_revenda.dto.ProductRequestDto;
+import br.com.oboticariorevenda.oboticario_revenda.dto.ProductCreateRequestDto;
 import br.com.oboticariorevenda.oboticario_revenda.enums.GenderEnum;
 import br.com.oboticariorevenda.oboticario_revenda.model.Product;
 import br.com.oboticariorevenda.oboticario_revenda.model.SocialAnalytics;
@@ -76,12 +76,12 @@ public class AdminController {
     }
 
     @GetMapping("/admin/criar-produto")
-    public String getAdminCreateProduct(ProductRequestDto productDto) {
+    public String getAdminCreateProduct(ProductCreateRequestDto productDto) {
         return "/admin/create-product";
     }
 
     @PostMapping("/admin/criar-produto")
-    public String createProduct(@Valid @ModelAttribute("productRequestDto") ProductRequestDto productDto, BindingResult bindingResult, Model model) throws IOException {
+    public String createProduct(@Valid @ModelAttribute("productCreateRequestDto") ProductCreateRequestDto productDto, BindingResult bindingResult, Model model) throws IOException {
         if (bindingResult.hasErrors()) {
 			return "/admin/create-product";
 		}
@@ -109,16 +109,12 @@ public class AdminController {
     }
 
     @PostMapping("/admin/editar-produto")
-    public String editProduct(@RequestParam String id, @Valid @ModelAttribute ProductEditRequestDto productEditRequestDto, BindingResult bindingResult) {
+    public String editProduct(@RequestParam String id, @Valid @ModelAttribute ProductEditRequestDto productEditRequestDto, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
             return "/admin/edit-product";
         }
 
-        try {
-            productService.editProduct(id, productEditRequestDto);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+        productService.editProduct(id, productEditRequestDto);
 
         return "redirect:/admin";
     }

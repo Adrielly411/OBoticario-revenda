@@ -2,6 +2,7 @@ package br.com.oboticariorevenda.oboticario_revenda.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import br.com.oboticariorevenda.oboticario_revenda.validator.FileIsImage;
 import jakarta.validation.constraints.AssertTrue;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,7 +15,7 @@ import lombok.Setter;
 @Builder
 @Getter
 @Setter
-public class ProductRequestDto {
+public class ProductCreateRequestDto {
     @NotBlank(message = "O nome do produto é obrigatório")
     private String name;
 
@@ -34,6 +35,7 @@ public class ProductRequestDto {
     @NotBlank(message = "O gênero do produto é obrigatório")
     private String gender;
 
+    @FileIsImage
     private MultipartFile imageFile;
 
     @AssertTrue(message = "A imagem do produto é obrigatória")
