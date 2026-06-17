@@ -56,7 +56,7 @@ public class SecurityConfig {
             .loginPage("/secret-login")
             .loginProcessingUrl("/perform-login")
             .failureUrl("/secret-login?error=true")
-            .defaultSuccessUrl("/admin/index")
+            .defaultSuccessUrl("/admin", true)
             .permitAll()
         );
         http.logout(logout -> logout

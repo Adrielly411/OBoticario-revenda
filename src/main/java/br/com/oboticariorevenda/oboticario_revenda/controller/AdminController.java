@@ -39,7 +39,7 @@ public class AdminController {
             products = productService.getProductsByCriteria(nameFilter);
             model.addAttribute("nameFilter", nameFilter);
             model.addAttribute("products", products);
-            return "/admin/index";
+            return "admin/index";
         }
 
         switch (filter) {
@@ -62,7 +62,7 @@ public class AdminController {
         }
 
         model.addAttribute("products", products);
-        return "/admin/index";
+        return "admin/index";
     }
 
     @GetMapping("/admin/relatorio")
@@ -72,18 +72,18 @@ public class AdminController {
         attributes.put("instagramClicks", socialAnalytics.getInstagram_clicks());
         attributes.put("whatsappClicks", socialAnalytics.getWhatsapp_clicks());
         model.addAllAttributes(attributes);
-        return "/admin/report";
+        return "admin/report";
     }
 
     @GetMapping("/admin/criar-produto")
     public String getAdminCreateProduct(ProductCreateRequestDto productDto) {
-        return "/admin/create-product";
+        return "admin/create-product";
     }
 
     @PostMapping("/admin/criar-produto")
     public String createProduct(@Valid @ModelAttribute("productCreateRequestDto") ProductCreateRequestDto productDto, BindingResult bindingResult, Model model) throws IOException {
         if (bindingResult.hasErrors()) {
-			return "/admin/create-product";
+			return "admin/create-product";
 		}
 
         productService.saveProduct(productDto);
@@ -105,13 +105,13 @@ public class AdminController {
         productDto.setImageUrl(product.getImageUrl());
 
         model.addAttribute("productEditRequestDto", productDto);
-        return "/admin/edit-product";
+        return "admin/edit-product";
     }
 
     @PostMapping("/admin/editar-produto")
     public String editProduct(@RequestParam String id, @Valid @ModelAttribute ProductEditRequestDto productEditRequestDto, BindingResult bindingResult) throws IOException {
         if (bindingResult.hasErrors()) {
-            return "/admin/edit-product";
+            return "admin/edit-product";
         }
 
         productService.editProduct(id, productEditRequestDto);
