@@ -9,8 +9,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import br.com.oboticariorevenda.oboticario_revenda.dto.ProductEditRequestDto;
 import br.com.oboticariorevenda.oboticario_revenda.dto.ProductCreateRequestDto;
+import br.com.oboticariorevenda.oboticario_revenda.dto.ProductEditRequestDto;
 import br.com.oboticariorevenda.oboticario_revenda.enums.GenderEnum;
 import br.com.oboticariorevenda.oboticario_revenda.exception.ImageKitUploadException;
 import br.com.oboticariorevenda.oboticario_revenda.exception.ProductNotFoundException;
@@ -39,42 +39,9 @@ public class ProductService {
         return productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Não foi possível encontrar o produto"));
     }
 
-    public List<Product> getProductsByCriteria(String name) {
-        List<Product> products = productRepository.findAllBy(name);
-        return products;
-    }
-
-    public List<Product> getProductsByGender(GenderEnum genderEnum) {
-        return productRepository.findByGender(genderEnum);
-    }
-
     public List<Product> getProductsWithHigherPrice() {
         List<Product> products = productRepository.findAll();
         products.sort(Comparator.comparing(Product::getDiscountedPrice).reversed());
-        return products;
-    }
-
-    public List<Product> getProductsWithLowerPrice() {
-        List<Product> products = productRepository.findAll();
-        products.sort(Comparator.comparing(Product::getDiscountedPrice));
-        return products;
-    }
-
-    public List<Product> getProductsWithHigherDiscount() {
-        List<Product> products = productRepository.findAll();
-        products.sort(Comparator.comparing(Product::getDiscountPercentage).reversed());
-        return products;
-    }
-
-    public List<Product> getProductsWithHigherQuantity() {
-        List<Product> products = productRepository.findAll();
-        products.sort(Comparator.comparing(Product::getQuantity).reversed());
-        return products;
-    }
-
-    public List<Product> getProductsWithLowerQuantity() {
-        List<Product> products = productRepository.findAll();
-        products.sort(Comparator.comparing(Product::getQuantity));
         return products;
     }
 

@@ -31,3 +31,24 @@ main {
 .img-greyed {
   filter: grayscale(90%);
 }
+
+.pagination .page-link {
+    color: #3CB371;
+    border-color: #dee2e6;
+}
+
+.pagination .page-link:hover {
+    color: #2e8b57;
+    background-color: #eaf7f0;
+    border-color: #dee2e6;
+}
+
+.pagination .page-item.active .page-link {
+    background-color: #3CB371;
+    border-color: #3CB371;
+    color: white;
+}
+
+.pagination .page-link:focus {
+    box-shadow: 0 0 0 0.25rem rgba(60, 179, 113, 0.25);
+}

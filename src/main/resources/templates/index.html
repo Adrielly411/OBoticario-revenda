@@ -39,8 +39,7 @@
         <div>
           <form th:action="@{/}" method="get" class="d-flex gap-2">
             <div class="me-auto d-flex col-8">
-              <input class="search-form form-control me-2" name="nameFilter" type="search" th:if="${nameFilter} == null" placeholder="Pesquisar produto" aria-label="Search"/>
-              <input class="search-form form-control me-2" name="nameFilter" type="search" th:if="${nameFilter} != null" th:placeholder="${nameFilter}" placeholder="Pesquisar produto" aria-label="Search"/>
+              <input class="search-form form-control me-2" name="nameFilter" type="search" th:value="*{nameFilter}" placeholder="Pesquisar produto" aria-label="Search"/>
               <button class="btn btn-outline-success me-2" type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
               <a class="btn btn-outline-danger" type="submit" th:href="@{/}"><i class="fa-solid fa-trash"></i></a>
             </div>
@@ -65,11 +64,11 @@
       </section>
 
       <section class="row row-cols-1 row-cols-lg-3 g-4">
-        <div class="col without-products mx-auto text-center" th:if="${#lists.isEmpty(products)}">
+        <div class="col without-products mx-auto text-center" th:if="${#lists.isEmpty(productPage)}">
           <h5 class="text-dark">Nenhum produto encontrado</h5>
         </div>
 
-        <div class="col" th:if="${!#lists.isEmpty(products)}" th:each="product : ${products}">
+        <div class="col" th:if="${!#lists.isEmpty(productPage)}" th:each="product : ${productPage.content}">
           <div th:if="${product.quantity} > 0" class="card h-100 shadow-lg border-0">
             <div class="position-relative">
               <img th:src="${product.imageUrl}" class="card-img-top">
@@ -84,12 +83,12 @@
               </div>
 
               <div class="mt-3">
-                <small class="fs-4 text-muted text-decoration-line-through d-block mb-1" th:text="|R$ ${product.price}|">
+                <small class="fs-4 text-muted text-decoration-line-through d-block mb-1" th:text="|R$ ${#numbers.formatDecimal(product.price, 1, 'POINT', 2, 'COMMA')}|">
                   Preço do produto
                 </small>
                 
                 <div class="d-flex align-items-baseline gap-2 mb-3">
-                  <span class="fs-4 fw-bold text-success" th:text="|R$ ${product.discountedPrice}|">
+                  <span class="fs-4 fw-bold text-success" th:text="|R$ ${#numbers.formatDecimal(product.discountedPrice, 1, 'POINT', 2, 'COMMA')}|">
                     Preço com desconto
                   </span>
                 </div>
@@ -120,12 +119,12 @@
               </div>
 
               <div class="mt-3">
-                <small class="fs-4 text-muted text-decoration-line-through d-block mb-1" th:text="|R$ ${product.price}|">
+                <small class="fs-4 text-muted text-decoration-line-through d-block mb-1" th:text="|R$ ${#numbers.formatDecimal(product.price, 1, 'POINT', 2, 'COMMA')}|">
                   Preço do produto
                 </small>
                 
                 <div class="d-flex align-items-baseline gap-2 mb-3">
-                  <span class="fs-4 fw-bold text-success" th:text="|R$ ${product.discountedPrice}|">
+                  <span class="fs-4 fw-bold text-success" th:text="|R$ ${#numbers.formatDecimal(product.discountedPrice, 1, 'POINT', 2, 'COMMA')}|">
                     Preço com desconto
                   </span>
                 </div>
@@ -140,6 +139,46 @@
           </div>
         </div>
       </section>
+
+      <nav class="mt-5" th:if="${productPage.totalPages > 0}">
+        <ul class="pagination justify-content-center">
+
+          <li class="page-item" th:classappend="${productPage.first} ? 'disabled'">
+            <a class="page-link" th:href="@{/(size=${productPage.size}, page=1, filter=${param.filter}, nameFilter=${param.nameFilter})}" aria-label="Primeira">
+              <span aria-hidden="true">&laquo;&laquo;</span>
+            </a>
+          </li>
+
+          <li class="page-item" th:classappend="${!productPage.hasPrevious()} ? 'disabled'">
+            <a class="page-link" th:href="@{/(size=${productPage.size}, page=${productPage.number}, filter=${param.filter}, nameFilter=${param.nameFilter})}" aria-label="Anterior">
+              <span aria-hidden="true">&laquo;</span>
+            </a>
+          </li>
+
+          <li class="page-item" 
+              th:each="pageNumber : ${pageNumbers}" 
+              th:if="${pageNumber >= productPage.number and pageNumber <= productPage.number + 2}"
+              th:classappend="${pageNumber == productPage.number + 1} ? 'active'">
+            <a class="page-link" 
+              th:text="${pageNumber}" 
+              th:href="@{/(size=${productPage.size}, page=${pageNumber}, filter=${param.filter}, nameFilter=${param.nameFilter})}">1</a>
+          </li>
+
+          <li class="page-item" th:classappend="${!productPage.hasNext()} ? 'disabled'">
+            <a class="page-link" th:href="@{/(size=${productPage.size}, page=${productPage.number + 2}, filter=${param.filter}, nameFilter=${param.nameFilter})}" aria-label="Próxima">
+              <span aria-hidden="true">&raquo;</span>
+            </a>
+          </li>
+
+          <li class="page-item" th:classappend="${productPage.last} ? 'disabled'">
+            <a class="page-link" th:href="@{/(size=${productPage.size}, page=${productPage.totalPages}, filter=${param.filter}, nameFilter=${param.nameFilter})}" aria-label="Última">
+              <span aria-hidden="true">&raquo;&raquo;</span>
+            </a>
+          </li>
+
+        </ul>
+      </nav>
+
     </main>
 
     <section th:insert="~{footer :: footer}"></section>

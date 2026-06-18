@@ -1,10 +1,15 @@
 package br.com.oboticariorevenda.oboticario_revenda.controller;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -18,51 +23,79 @@ import br.com.oboticariorevenda.oboticario_revenda.dto.ProductCreateRequestDto;
 import br.com.oboticariorevenda.oboticario_revenda.enums.GenderEnum;
 import br.com.oboticariorevenda.oboticario_revenda.model.Product;
 import br.com.oboticariorevenda.oboticario_revenda.model.SocialAnalytics;
+import br.com.oboticariorevenda.oboticario_revenda.service.PagingProductService;
 import br.com.oboticariorevenda.oboticario_revenda.service.ProductService;
 import jakarta.validation.Valid;
 
 @Controller
 public class AdminController {
     private ProductService productService;
+    private PagingProductService pagingProductService;
     private SocialAnalytics socialAnalytics;
 
-    public AdminController(ProductService productService, SocialAnalytics socialAnalytics) {
+    public AdminController(ProductService productService, PagingProductService pagingProductService, SocialAnalytics socialAnalytics) {
         this.productService = productService;
+        this.pagingProductService = pagingProductService;
         this.socialAnalytics = socialAnalytics;
     }
 
     @GetMapping("/admin")
-    public String getAdminIndex(@RequestParam(required = false, defaultValue = "all") String filter, @RequestParam(required = false, defaultValue = "") String nameFilter, Model model) {
-        List<Product> products = new ArrayList<>();
+    public String getAdminIndex(@RequestParam(required = false, defaultValue = "all") String filter,
+                                @RequestParam(required = false, defaultValue = "") String nameFilter, Model model,
+                                @RequestParam("page") Optional<Integer> page, @RequestParam("size") Optional<Integer> size) {
+
+        int currentPage = page.orElse(1);
+        int pageSize = size.orElse(9);
+
+        Page<Product> productPage;
+        Pageable pageable = PageRequest.of(currentPage - 1, pageSize);
 
         if (!nameFilter.isBlank()) {
-            products = productService.getProductsByCriteria(nameFilter);
+            productPage = pagingProductService.getPaginatedProductsByCriteria(pageable, nameFilter);
             model.addAttribute("nameFilter", nameFilter);
-            model.addAttribute("products", products);
+
+            model.addAttribute("productPage", productPage);
+            int totalPages = productPage.getTotalPages();
+            if (totalPages > 0) {
+                List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                    .boxed()
+                    .collect(Collectors.toList());
+
+                model.addAttribute("pageNumbers", pageNumbers);
+            }
             return "admin/index";
         }
 
         switch (filter) {
             case "MALE", "FEMALE" -> {
                 GenderEnum genderEnum = GenderEnum.valueOf(filter);
-                products = productService.getProductsByGender(genderEnum);
+                productPage = pagingProductService.getPaginatedProductsByGender(pageable, genderEnum);
             } 
         
-            case "higherPrice" -> products = productService.getProductsWithHigherPrice();
+            case "higherPrice" -> productPage = pagingProductService.getPaginatedProductsWithHigherPrice(pageable);
 
-            case "lowerPrice" -> products = productService.getProductsWithLowerPrice();
+            case "lowerPrice" -> productPage = pagingProductService.getPaginatedProductsWithLowerPrice(pageable);
 
-            case "higherDiscount" -> products = productService.getProductsWithHigherDiscount();
+            case "higherDiscount" -> productPage = pagingProductService.getPaginatedProductsWithHigherDiscount(pageable);
 
-            case "higherQuantity" -> products = productService.getProductsWithHigherQuantity();
+            case "higherQuantity" -> productPage = pagingProductService.getPaginatedProductsWithHigherQuantity(pageable);
 
-            case "lowerQuantity" -> products = productService.getProductsWithLowerQuantity();
+            case "lowerQuantity" -> productPage = pagingProductService.getPaginatedProductsWithLowerQuantity(pageable);
 
-            default -> products = productService.getAllProducts();
+            default -> productPage = pagingProductService.getAllPaginatedProducts(pageable);
         }
 
-        model.addAttribute("products", products);
-        return "admin/index";
+        model.addAttribute("productPage", productPage);
+        int totalPages = productPage.getTotalPages();
+        if (totalPages > 0) {
+            List<Integer> pageNumbers = IntStream.rangeClosed(1, totalPages)
+                .boxed()
+                .collect(Collectors.toList());
+
+            model.addAttribute("pageNumbers", pageNumbers);
+        }
+
+        return "admin/index";    
     }
 
     @GetMapping("/admin/relatorio")
